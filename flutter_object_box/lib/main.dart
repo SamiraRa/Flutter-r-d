@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_object_box/controller/objectbox.dart';
+import 'package:flutter_object_box/objectbox.g.dart';
 import 'package:flutter_object_box/view/home_page.dart';
+
+late Store store;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await ObjectBox.init();
+  store = (await ObjectBox.create()).store;
   runApp(const MyApp());
 }
 

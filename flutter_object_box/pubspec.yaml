@@ -37,6 +37,7 @@ dependencies:
 
   objectbox:
   objectbox_sync_flutter_libs:
+  path_provider:
 
 dev_dependencies:
   flutter_test:
