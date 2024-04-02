@@ -8,6 +8,9 @@
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 <uses-permission  android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <queries>
+        <package android:name="com.whatsapp" /> // your android package name
+    </queries>
     <application
         android:label="flutter_object_box"
         android:name="${applicationName}"
@@ -31,8 +34,11 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.HOME"/> 
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data

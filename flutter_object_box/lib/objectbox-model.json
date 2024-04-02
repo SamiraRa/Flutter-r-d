@@ -5,9 +5,8 @@
   "entities": [
     {
       "id": "1:5619064148317518856",
-      "lastPropertyId": "3:6210826219360964029",
+      "lastPropertyId": "10:7480557793518904478",
       "name": "User",
-      "flags": 2,
       "properties": [
         {
           "id": "1:5734078672568872506",
@@ -16,13 +15,38 @@
           "flags": 1
         },
         {
-          "id": "2:7687588596944487077",
-          "name": "name",
+          "id": "4:998932825072819963",
+          "name": "firstLat",
+          "type": 8
+        },
+        {
+          "id": "5:2085641102946887601",
+          "name": "firstLong",
+          "type": 8
+        },
+        {
+          "id": "6:6398853731999017562",
+          "name": "secondLat",
+          "type": 8
+        },
+        {
+          "id": "7:6939686121595671432",
+          "name": "secondLong",
+          "type": 8
+        },
+        {
+          "id": "8:3567028199864521342",
+          "name": "firstlocAddress",
           "type": 9
         },
         {
-          "id": "3:6210826219360964029",
-          "name": "email",
+          "id": "9:2115432844174364957",
+          "name": "secondlocAddress",
+          "type": 9
+        },
+        {
+          "id": "10:7480557793518904478",
+          "name": "distance",
           "type": 9
         }
       ],
@@ -37,7 +61,10 @@
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    7687588596944487077,
+    6210826219360964029
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

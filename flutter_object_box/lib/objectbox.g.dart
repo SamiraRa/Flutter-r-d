@@ -13,7 +13,7 @@ import 'package:flat_buffers/flat_buffers.dart' as fb;
 import 'package:objectbox/internal.dart'
     as obx_int; // generated code can access "internal" functionality
 import 'package:objectbox/objectbox.dart' as obx;
-import 'package:objectbox_sync_flutter_libs/objectbox_sync_flutter_libs.dart';
+import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
 import 'model/user_model.dart';
 
@@ -23,8 +23,8 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(1, 5619064148317518856),
       name: 'User',
-      lastPropertyId: const obx_int.IdUid(3, 6210826219360964029),
-      flags: 2,
+      lastPropertyId: const obx_int.IdUid(10, 7480557793518904478),
+      flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
             id: const obx_int.IdUid(1, 5734078672568872506),
@@ -32,13 +32,38 @@ final _entities = <obx_int.ModelEntity>[
             type: 6,
             flags: 1),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 7687588596944487077),
-            name: 'name',
+            id: const obx_int.IdUid(4, 998932825072819963),
+            name: 'firstLat',
+            type: 8,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 2085641102946887601),
+            name: 'firstLong',
+            type: 8,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 6398853731999017562),
+            name: 'secondLat',
+            type: 8,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(7, 6939686121595671432),
+            name: 'secondLong',
+            type: 8,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(8, 3567028199864521342),
+            name: 'firstlocAddress',
             type: 9,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 6210826219360964029),
-            name: 'email',
+            id: const obx_int.IdUid(9, 2115432844174364957),
+            name: 'secondlocAddress',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(10, 7480557793518904478),
+            name: 'distance',
             type: 9,
             flags: 0)
       ],
@@ -87,7 +112,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
       lastSequenceId: const obx_int.IdUid(0, 0),
       retiredEntityUids: const [],
       retiredIndexUids: const [],
-      retiredPropertyUids: const [],
+      retiredPropertyUids: const [7687588596944487077, 6210826219360964029],
       retiredRelationUids: const [],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
@@ -103,12 +128,19 @@ obx_int.ModelDefinition getObjectBoxModel() {
           object.id = id;
         },
         objectToFB: (User object, fb.Builder fbb) {
-          final nameOffset = fbb.writeString(object.name);
-          final emailOffset = fbb.writeString(object.email);
-          fbb.startTable(4);
+          final firstlocAddressOffset = fbb.writeString(object.firstlocAddress);
+          final secondlocAddressOffset =
+              fbb.writeString(object.secondlocAddress);
+          final distanceOffset = fbb.writeString(object.distance);
+          fbb.startTable(11);
           fbb.addInt64(0, object.id);
-          fbb.addOffset(1, nameOffset);
-          fbb.addOffset(2, emailOffset);
+          fbb.addFloat64(3, object.firstLat);
+          fbb.addFloat64(4, object.firstLong);
+          fbb.addFloat64(5, object.secondLat);
+          fbb.addFloat64(6, object.secondLong);
+          fbb.addOffset(7, firstlocAddressOffset);
+          fbb.addOffset(8, secondlocAddressOffset);
+          fbb.addOffset(9, distanceOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -117,11 +149,31 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final rootOffset = buffer.derefObject(0);
           final idParam =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-          final nameParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 6, '');
-          final emailParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 8, '');
-          final object = User(id: idParam, name: nameParam, email: emailParam);
+          final firstLatParam =
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 10, 0);
+          final firstLongParam =
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 12, 0);
+          final secondLatParam =
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 14, 0);
+          final secondLongParam =
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 16, 0);
+          final firstlocAddressParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 18, '');
+          final secondlocAddressParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 20, '');
+          final distanceParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 22, '');
+          final object = User(
+              id: idParam,
+              firstLat: firstLatParam,
+              firstLong: firstLongParam,
+              secondLat: secondLatParam,
+              secondLong: secondLongParam,
+              firstlocAddress: firstlocAddressParam,
+              secondlocAddress: secondlocAddressParam,
+              distance: distanceParam);
 
           return object;
         })
@@ -135,10 +187,31 @@ class User_ {
   /// see [User.id]
   static final id = obx.QueryIntegerProperty<User>(_entities[0].properties[0]);
 
-  /// see [User.name]
-  static final name = obx.QueryStringProperty<User>(_entities[0].properties[1]);
+  /// see [User.firstLat]
+  static final firstLat =
+      obx.QueryDoubleProperty<User>(_entities[0].properties[1]);
 
-  /// see [User.email]
-  static final email =
-      obx.QueryStringProperty<User>(_entities[0].properties[2]);
+  /// see [User.firstLong]
+  static final firstLong =
+      obx.QueryDoubleProperty<User>(_entities[0].properties[2]);
+
+  /// see [User.secondLat]
+  static final secondLat =
+      obx.QueryDoubleProperty<User>(_entities[0].properties[3]);
+
+  /// see [User.secondLong]
+  static final secondLong =
+      obx.QueryDoubleProperty<User>(_entities[0].properties[4]);
+
+  /// see [User.firstlocAddress]
+  static final firstlocAddress =
+      obx.QueryStringProperty<User>(_entities[0].properties[5]);
+
+  /// see [User.secondlocAddress]
+  static final secondlocAddress =
+      obx.QueryStringProperty<User>(_entities[0].properties[6]);
+
+  /// see [User.distance]
+  static final distance =
+      obx.QueryStringProperty<User>(_entities[0].properties[7]);
 }

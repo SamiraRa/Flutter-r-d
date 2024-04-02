@@ -1,4 +1,5 @@
 import 'package:flutter_object_box/objectbox.g.dart';
+import 'package:objectbox/objectbox.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
