@@ -133,7 +133,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
               fbb.writeString(object.secondlocAddress);
           final distanceOffset = fbb.writeString(object.distance);
           fbb.startTable(11);
-          fbb.addInt64(0, object.id);
+          fbb.addInt64(0, object.id ?? 0);
           fbb.addFloat64(3, object.firstLat);
           fbb.addFloat64(4, object.firstLong);
           fbb.addFloat64(5, object.secondLat);
@@ -142,13 +142,13 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addOffset(8, secondlocAddressOffset);
           fbb.addOffset(9, distanceOffset);
           fbb.finish(fbb.endTable());
-          return object.id;
+          return object.id ?? 0;
         },
         objectFromFB: (obx.Store store, ByteData fbData) {
           final buffer = fb.BufferContext(fbData);
           final rootOffset = buffer.derefObject(0);
           final idParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
           final firstLatParam =
               const fb.Float64Reader().vTableGet(buffer, rootOffset, 10, 0);
           final firstLongParam =

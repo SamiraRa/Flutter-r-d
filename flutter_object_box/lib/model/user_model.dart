@@ -4,7 +4,7 @@ import 'package:objectbox/objectbox.dart';
 @Entity()
 // @Sync()
 class User {
-  int id;
+  int? id;
   double firstLat;
   double firstLong;
   double secondLat;
@@ -14,7 +14,7 @@ class User {
   String distance;
 
   User({
-    this.id = 0,
+    this.id,
     required this.firstLat,
     required this.firstLong,
     required this.secondLat,
