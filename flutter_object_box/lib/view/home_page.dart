@@ -4,6 +4,8 @@ import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_object_box/controller/global_data.dart';
 import 'package:flutter_object_box/model/user_model.dart';
+import 'package:flutter_object_box/view/show_material_banner.dart';
+import 'package:flutter_object_box/widget/floating_action_button_widget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:location/location.dart';
@@ -42,68 +44,74 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Home Page"),
+        title: const Text("Distance Meter"),
       ),
-      body: Column(
-        children: [
-          // StreamBuilder(stream: stream, builder: (builder))
-          ListView.builder(
-              padding: const EdgeInsets.only(top: 10, bottom: 10),
-              itemCount: streamUser.length,
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(streamUser[index].firstLat.toStringAsFixed(2)),
-                        Text(streamUser[index].firstLong.toStringAsFixed(2)),
-                        // Text(
-                        //   streamUser[index].firstlocAddress,
-                        // ),
-                        // const Divider(
-                        //   height: 10,
-                        //   thickness: 1,
-                        //   color: Colors.orange,
-                        // )
-                      ],
-                    ),
-                    Text(streamUser[index].distance),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(streamUser[index].secondLat.toStringAsFixed(2)),
-                        Text(streamUser[index].secondLong.toStringAsFixed(2)),
-                        Text(streamUser[index].secondlocAddress),
-                      ],
-                    ),
-                  ],
-                );
-              }),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: firstLocationTaken ? Colors.grey : Colors.white,
-                    foregroundColor: firstLocationTaken ? Colors.white : Colors.purple),
-                onPressed: () async {
-                  if (!firstLocationTaken) {
-                    locationData = await getLocation();
-                    firstLatitudeF = locationData!.latitude ?? 0.0;
-                    firstlongitudeF = locationData!.longitude ?? 0.0;
-                    firstLocationTaken = true;
-                    setState(() {});
-                  }
-                },
-                child: const Text("First Place"),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  if (firstLocationTaken) {
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // StreamBuilder(stream: stream, builder: (builder))
+            ListView.builder(
+                padding: const EdgeInsets.only(top: 10, bottom: 10),
+                itemCount: streamUser.length,
+                shrinkWrap: true,
+                physics: const BouncingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(streamUser[index].firstLat.toStringAsFixed(2)),
+                          Text(streamUser[index].firstLong.toStringAsFixed(2)),
+                          // Text(
+                          //   streamUser[index].firstlocAddress,
+                          // ),
+                          // const Divider(
+                          //   height: 10,
+                          //   thickness: 1,
+                          //   color: Colors.orange,
+                          // )
+                        ],
+                      ),
+                      Text(streamUser[index].distance),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(streamUser[index].secondLat.toStringAsFixed(2)),
+                          Text(streamUser[index].secondLong.toStringAsFixed(2)),
+                          Text(streamUser[index].secondlocAddress),
+                        ],
+                      ),
+                    ],
+                  );
+                }),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: firstLocationTaken ? Colors.grey : Colors.white,
+                      foregroundColor: firstLocationTaken ? Colors.white : Colors.purple),
+                  onPressed: () async {
+                    if (!firstLocationTaken) {
+                      locationData = await getLocation();
+                      firstLatitudeF = locationData!.latitude ?? 0.0;
+                      firstlongitudeF = locationData!.longitude ?? 0.0;
+                      firstLocationTaken = true;
+                      setState(() {});
+                    }
+                  },
+                  child: const Text("First Place"),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    if (!firstLocationTaken) {
+                      Fluttertoast.showToast(msg: "Please click First Place button first!");
+                      return;
+                    }
+
                     locationData = await getLocation();
                     secondLatitudeF = locationData!.latitude ?? 0.0;
                     secondlongitudeF = locationData!.longitude ?? 0.0;
@@ -123,31 +131,35 @@ class _HomePageState extends State<HomePage> {
                       streamUser = userBox.getAll();
                       firstLocationTaken = false;
                     });
-                  } else {
-                    Fluttertoast.showToast(msg: "Please click First Place button first!");
-                  }
-                },
-                child: const Text("Second Place"),
-              ),
-            ],
-          )
-        ],
-      ),
-      floatingActionButton: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
-          color: Colors.green,
+                  },
+                  child: const Text("Second Place"),
+                ),
+              ],
+            )
+          ],
         ),
-        child: IconButton(
+      ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionWidget(
+            iconName: Icons.notifications_active_outlined,
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const ShowMaterialBanner()));
+            },
+            iconSize: 32,
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          FloatingActionWidget(
+            iconName: Icons.call,
             onPressed: () async {
-              // await LaunchApp.openApp(androidPackageName: "com.whatsapp");
               await LaunchApp.openApp(androidPackageName: "com.whatsapp");
             },
-            icon: const Icon(
-              Icons.call,
-              size: 32,
-            )),
+            iconSize: 32,
+          ),
+        ],
       ),
     );
   }
