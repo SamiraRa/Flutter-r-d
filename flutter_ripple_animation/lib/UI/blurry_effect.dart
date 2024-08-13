@@ -10,6 +10,12 @@ class BlurryEffectScreen extends StatefulWidget {
 class _BlurryEffectScreenState extends State<BlurryEffectScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return const Scaffold(
+      body: Center(
+        child: SizedBox(
+          child: Text("HI! I am Blurry Screen!!"),
+        ),
+      ),
+    );
   }
 }

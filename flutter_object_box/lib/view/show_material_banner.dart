@@ -41,12 +41,12 @@ class _ShowMaterialBannerState extends State<ShowMaterialBanner> {
 
   getCaffeine(type) {
     String caffeine;
-// const map = {
-//     "Coffee": "95 gm",
-//     "Redbull": "147 gm",
-//     "Tea": "11 gm",
-//     "Soda": "21 gm",
-//   };
+    // const map = {
+    //     "Coffee": "95 gm",
+    //     "Redbull": "147 gm",
+    //     "Tea": "11 gm",
+    //     "Soda": "21 gm",
+    //   };
     caffeine = map[type] ?? "Not Found";
     return caffeine;
   }
