@@ -4,6 +4,7 @@ import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_object_box/controller/global_data.dart';
 import 'package:flutter_object_box/model/user_model.dart';
+import 'package:flutter_object_box/view/ppt_view.dart';
 import 'package:flutter_object_box/view/show_material_banner.dart';
 import 'package:flutter_object_box/widget/floating_action_button_widget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -45,6 +46,56 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Distance Meter"),
+      ),
+      drawer: Drawer(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 150,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage(
+                      "assets/images/textures_patterns.jpg",
+                    ),
+                    fit: BoxFit.cover),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [Text("Hi!"), Text("samirarashid698@gmail.com")],
+                  )
+                ],
+              ),
+            ),
+            ListTile(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => PptView()));
+              },
+              leading: Image.asset(
+                "assets/images/slide.png",
+                height: 40,
+                width: 40,
+                color: const Color.fromARGB(255, 214, 149, 171),
+              ),
+              title: Text(
+                "Presentation Files",
+                style: TextStyle(
+                    fontSize: 14,
+                    color: Color.fromARGB(255, 30, 48, 129),
+                    fontWeight: FontWeight.w500,
+                    fontStyle: FontStyle.italic),
+              ),
+            )
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(

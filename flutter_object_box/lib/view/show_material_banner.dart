@@ -16,27 +16,38 @@ class _ShowMaterialBannerState extends State<ShowMaterialBanner> {
   };
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        // appBar: PreferredSize(preferredSize: preferredSize, child: Text("")),
-        body: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Center(
-          child: ElevatedButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context)
-                    .showMaterialBanner(MaterialBanner(content: const Text("Subscribe"), actions: [
-                  TextButton(
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
-                      },
-                      child: const Text("Dismiss"))
-                ]));
-              },
-              child: const Text("Open")),
-        )
-      ],
-    ));
+    return WillPopScope(
+      onWillPop: () async {
+        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+        await Future.delayed(Duration(milliseconds: 100));
+
+        Navigator.of(context).pop();
+        return true;
+      },
+      child: Scaffold(
+          // appBar: PreferredSize(preferredSize: preferredSize, child: Text("")),
+          body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: ElevatedButton(
+                onPressed: () {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context)
+                        .showMaterialBanner(MaterialBanner(content: const Text("Subscribe"), actions: [
+                      TextButton(
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+                          },
+                          child: const Text("Dismiss"))
+                    ]));
+                  }
+                },
+                child: const Text("Open")),
+          )
+        ],
+      )),
+    );
   }
 
   getCaffeine(type) {
