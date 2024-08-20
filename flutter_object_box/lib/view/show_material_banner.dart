@@ -18,7 +18,7 @@ class _ShowMaterialBannerState extends State<ShowMaterialBanner> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+        ScaffoldMessenger.of(context).clearMaterialBanners();
         await Future.delayed(Duration(milliseconds: 100));
 
         Navigator.of(context).pop();

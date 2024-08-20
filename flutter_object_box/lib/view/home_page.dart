@@ -4,6 +4,7 @@ import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_object_box/controller/global_data.dart';
 import 'package:flutter_object_box/model/user_model.dart';
+import 'package:flutter_object_box/view/download_and_preview.dart';
 import 'package:flutter_object_box/view/ppt_view.dart';
 import 'package:flutter_object_box/view/show_material_banner.dart';
 import 'package:flutter_object_box/widget/floating_action_button_widget.dart';
@@ -53,17 +54,20 @@ class _HomePageState extends State<HomePage> {
           children: [
             Container(
               height: 150,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage(
                       "assets/images/textures_patterns.jpg",
                     ),
                     fit: BoxFit.cover),
               ),
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircleAvatar(),
+                  CircleAvatar(
+                    backgroundColor: Colors.pink,
+                    child: Text("S"),
+                  ),
                   SizedBox(
                     width: 20,
                   ),
@@ -77,7 +81,7 @@ class _HomePageState extends State<HomePage> {
             ),
             ListTile(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => PptView()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const PptView()));
               },
               leading: Image.asset(
                 "assets/images/slide.png",
@@ -85,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                 width: 40,
                 color: const Color.fromARGB(255, 214, 149, 171),
               ),
-              title: Text(
+              title: const Text(
                 "Presentation Files",
                 style: TextStyle(
                     fontSize: 14,
@@ -93,7 +97,29 @@ class _HomePageState extends State<HomePage> {
                     fontWeight: FontWeight.w500,
                     fontStyle: FontStyle.italic),
               ),
-            )
+            ),
+            ListTile(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const DownloadAndPreview()));
+              },
+              leading: Padding(
+                padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                child: Image.asset(
+                  "assets/icons/open.png",
+                  height: 30,
+                  width: 30,
+                  color: const Color.fromARGB(255, 214, 149, 171),
+                ),
+              ),
+              title: const Text(
+                "Download and Preview",
+                style: TextStyle(
+                    fontSize: 14,
+                    color: Color.fromARGB(255, 30, 48, 129),
+                    fontWeight: FontWeight.w500,
+                    fontStyle: FontStyle.italic),
+              ),
+            ),
           ],
         ),
       ),
