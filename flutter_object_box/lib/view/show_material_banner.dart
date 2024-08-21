@@ -19,7 +19,7 @@ class _ShowMaterialBannerState extends State<ShowMaterialBanner> {
     return WillPopScope(
       onWillPop: () async {
         ScaffoldMessenger.of(context).clearMaterialBanners();
-        await Future.delayed(Duration(milliseconds: 100));
+        await Future.delayed(const Duration(milliseconds: 100));
 
         Navigator.of(context).pop();
         return true;

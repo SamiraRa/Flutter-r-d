@@ -37,14 +37,13 @@ dependencies:
   fluttertoast: ^8.2.5
   objectbox: ^2.5.1
   objectbox_flutter_libs:
-  # objectbox_sync_flutter_libs:
-  path_provider: ^2.1.4
-  file_picker: ^8.1.2
+  file_picker: ^7.0.2
   location: ^5.0.3
   geocoding: ^2.2.0
   external_app_launcher:
   device_info_plus:
   open_file: ^3.3.2
+  photo_view: ^0.15.0
 
 dev_dependencies:
   flutter_test:

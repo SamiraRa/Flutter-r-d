@@ -1,7 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:open_file/open_file.dart';
+// import 'package:path_provider/path_provider.dart';
 
 class DownloadAndPreview extends StatefulWidget {
   const DownloadAndPreview({Key? key}) : super(key: key);
@@ -11,6 +14,9 @@ class DownloadAndPreview extends StatefulWidget {
 }
 
 class _DownloadAndPreviewState extends State<DownloadAndPreview> {
+  List<String> imgExtensions = ["jpg", "jpeg", "png", "webp", "svg"];
+  File? imgFile;
+
   @override
   void initState() {
     super.initState();
@@ -20,20 +26,30 @@ class _DownloadAndPreviewState extends State<DownloadAndPreview> {
   }
 
   void getFile() async {
-    Directory tempDirect = await getTemporaryDirectory();
-    String tempPath = tempDirect.path;
-    print(tempPath);
+    final result = await FilePicker.platform.pickFiles();
+    final file = result!.files.first;
 
-    //================================================================
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String appDirPath = appDocDir.path;
-    final file = File('$appDirPath');
-    print(appDirPath);
+    final fileExt = file.extension;
 
-    //================================================================
-    Directory? externalStorageDir = await getExternalStorageDirectory();
-    String externalFilePath = externalStorageDir!.path;
-    print(externalFilePath);
+    if (fileExt == "pdf") {
+      OpenFile.open(file.path!);
+    } else if (imgExtensions.contains(fileExt)) {
+      imgFile = File(file.path!);
+    }
+    // Directory tempDirect = await getTemporaryDirectory();
+    // String tempPath = tempDirect.path;
+    // print(tempPath);
+
+    // //================================================================
+    // Directory appDocDir = await getApplicationDocumentsDirectory();
+    // String appDirPath = appDocDir.path;
+    // final file = File('$appDirPath');
+    // print(appDirPath);
+
+    // //================================================================
+    // Directory? externalStorageDir = await getExternalStorageDirectory();
+    // String externalFilePath = externalStorageDir!.path;
+    // print(externalFilePath);
   }
 
   @override
@@ -44,7 +60,13 @@ class _DownloadAndPreviewState extends State<DownloadAndPreview> {
         title: Text("Preview"),
       ),
       body: Column(
-        children: [],
+        children: [
+          imgFile != null
+              ? SizedBox(
+                  child: Text(""),
+                )
+              : SizedBox()
+        ],
       ),
     );
   }
