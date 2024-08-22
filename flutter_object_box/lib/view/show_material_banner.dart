@@ -20,7 +20,6 @@ class _ShowMaterialBannerState extends State<ShowMaterialBanner> {
       onWillPop: () async {
         ScaffoldMessenger.of(context).clearMaterialBanners();
         await Future.delayed(const Duration(milliseconds: 100));
-
         Navigator.of(context).pop();
         return true;
       },
