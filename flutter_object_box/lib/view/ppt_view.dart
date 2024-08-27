@@ -16,7 +16,7 @@ class PptView extends StatefulWidget {
 }
 
 class _PptViewState extends State<PptView> {
-  // final Completer<PDFViewController> _controller = Completer<PDFViewController>();
+  final Completer<PDFViewController> _controller = Completer<PDFViewController>();
   int? pages = 0;
   int? currentPage = 0;
   bool isReady = false;
@@ -43,40 +43,41 @@ class _PptViewState extends State<PptView> {
 
     if (permission.isGranted) {
       if (fileExt == "pdf") {
-        // fromAsset(file.path.toString(), "abcd", file).then((value) {
-        //   setState(() {
-        //     pdfFilePath = file.path.toString();
-        //   });
-        // File newFile = File(pdfFilePath);
-        // var data = await rootBundle.load(pdfFilePath);
-        // var bytes = data.buffer.asUint8List();
-        // newFile.writeAsBytesSync(bytes, flush: true);
+        fromAsset(file.path.toString(), "abcd", file).then((value) {
+          setState(() {
+            pdfFilePath = file.path.toString();
+          });
+          // File newFile = File(pdfFilePath);
+          // var data = await rootBundle.load(pdfFilePath);
+          // var bytes = data.buffer.asUint8List();
+          // newFile.writeAsBytesSync(bytes, flush: true);
 
-        // completer.complete(newFile);
-        // });
+          // completer.complete(newFile);
+        });
         // OpenFile.open(file.path!);
       }
     }
   }
 
-  // Future fromAsset(String asset, String filename, PlatformFile platformfile) async {
-  //   // To open from assets, you can copy them to the app storage folder, and the access them "locally"
-  //   Completer<File> completer = Completer();
+  Future fromAsset(String asset, String filename, PlatformFile platformfile) async {
+    // To open from assets, you can copy them to the app storage folder, and the access them "locally"
+    Completer<File> completer = Completer();
 
-  //   try {
-  //     // var dir = await getApplicationDocumentsDirectory();
-  //     File file = File(platformfile.path!);
-  //     var data = await rootBundle.load(platformfile.path!);
-  //     var bytes = data.buffer.asUint8List();
+    try {
+      // var dir = await getApplicationDocumentsDirectory();
+      File file = File(platformfile.path!);
+      // var data = await rootBundle.load(platformfile.path!);
+      // var bytes = data.buffer.asUint8List();
+      final bytes = await file.readAsBytes();
 
-  //     await file.writeAsBytes(bytes, flush: true);
-  //     completer.complete(file);
-  //   } catch (e) {
-  //     throw Exception('Error parsing asset file!');
-  //   }
+      await file.writeAsBytes(bytes, flush: true);
+      completer.complete(file);
+    } catch (e) {
+      throw Exception('Error parsing asset file!');
+    }
 
-  //   // return completer.future;
-  // }
+    // return completer.future;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,9 +121,9 @@ class _PptViewState extends State<PptView> {
               });
               print('$page: ${error.toString()}');
             },
-            // onViewCreated: (PDFViewController pdfViewController) {
-            //   _controller.complete(pdfViewController);
-            // },
+            onViewCreated: (PDFViewController pdfViewController) {
+              _controller.complete(pdfViewController);
+            },
             onLinkHandler: (String? uri) {
               print('goto uri: $uri');
             },
@@ -144,21 +145,21 @@ class _PptViewState extends State<PptView> {
                 )
         ],
       ),
-      // floatingActionButton: FutureBuilder<PDFViewController>(
-      //   future: _controller.future,
-      //   builder: (context, AsyncSnapshot<PDFViewController> snapshot) {
-      //     if (snapshot.hasData) {
-      //       return FloatingActionButton.extended(
-      //         label: Text("Go to ${pages! ~/ 2}"),
-      //         onPressed: () async {
-      //           await snapshot.data!.setPage(pages! ~/ 2);
-      //         },
-      //       );
-      //     }
+      floatingActionButton: FutureBuilder<PDFViewController>(
+        future: _controller.future,
+        builder: (context, AsyncSnapshot<PDFViewController> snapshot) {
+          if (snapshot.hasData) {
+            return FloatingActionButton.extended(
+              label: Text("Go to ${pages! ~/ 2}"),
+              onPressed: () async {
+                await snapshot.data!.setPage(pages! ~/ 2);
+              },
+            );
+          }
 
-      //     return Container();
-      //   },
-      // ),
+          return Container();
+        },
+      ),
     );
   }
 }

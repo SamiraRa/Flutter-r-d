@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_object_box/controller/global_data.dart';
 import 'package:flutter_object_box/model/user_model.dart';
 import 'package:flutter_object_box/view/download_and_preview.dart';
+import 'package:flutter_object_box/view/pdftron_flutter.dart';
 import 'package:flutter_object_box/view/ppt_view.dart';
 import 'package:flutter_object_box/view/show_material_banner.dart';
 import 'package:flutter_object_box/widget/floating_action_button_widget.dart';
@@ -12,6 +13,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:location/location.dart';
 import 'package:objectbox/objectbox.dart';
+import 'package:pdftron_flutter/pdftron_flutter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -91,6 +93,28 @@ class _HomePageState extends State<HomePage> {
               ),
               title: const Text(
                 "Presentation Files",
+                style: TextStyle(
+                    fontSize: 14,
+                    color: Color.fromARGB(255, 30, 48, 129),
+                    fontWeight: FontWeight.w500,
+                    fontStyle: FontStyle.italic),
+              ),
+            ),
+            ListTile(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const PdfTronFlutterScreen()));
+              },
+              leading: Padding(
+                padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                child: Image.asset(
+                  "assets/icons/document-file.png",
+                  height: 30,
+                  width: 30,
+                  color: const Color.fromARGB(255, 214, 149, 171),
+                ),
+              ),
+              title: const Text(
+                "PdfTron",
                 style: TextStyle(
                     fontSize: 14,
                     color: Color.fromARGB(255, 30, 48, 129),
