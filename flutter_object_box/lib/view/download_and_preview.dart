@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:open_file/open_file.dart';
 import 'package:photo_view/photo_view.dart';
@@ -17,11 +19,16 @@ class DownloadAndPreview extends StatefulWidget {
 }
 
 class _DownloadAndPreviewState extends State<DownloadAndPreview> {
+  final Completer<PDFViewController> _controller = Completer<PDFViewController>();
+  int? pages = 0;
+  int? currentPage = 0;
+  bool isReady = false;
   List<String> imgExtensions = ["jpg", "jpeg", "png", "webp"];
   File? imgFile;
   File? svgImageFile;
   bool initialized = true;
-
+  String pdfFilePath = "";
+  Uint8List? pdfFileBytes;
   @override
   void initState() {
     super.initState();
@@ -39,7 +46,12 @@ class _DownloadAndPreviewState extends State<DownloadAndPreview> {
     final fileExt = file.extension;
 
     if (fileExt == "pdf") {
-      OpenFile.open(file.path!);
+      fromAsset("abcd", file).then((value) {
+        setState(() {
+          pdfFilePath = file.path.toString();
+        });
+      });
+      // OpenFile.open(file.path!);
     } else if (imgExtensions.contains(fileExt)) {
       setState(() {
         imgFile = File(file.path!);
@@ -67,6 +79,19 @@ class _DownloadAndPreviewState extends State<DownloadAndPreview> {
     // print(externalFilePath);
   }
 
+  Future fromAsset(String filename, PlatformFile platformfile) async {
+    Completer<File> completer = Completer();
+    try {
+      File file = File(platformfile.path!);
+      final bytes = await file.readAsBytes();
+      await file.writeAsBytes(bytes, flush: true);
+      pdfFileBytes = file.readAsBytesSync();
+      completer.complete(file);
+    } catch (e) {
+      throw Exception('Error parsing asset file!');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,7 +113,32 @@ class _DownloadAndPreviewState extends State<DownloadAndPreview> {
                       height: 400,
                       width: double.infinity,
                     )
-                  : const SizedBox()
+                  : pdfFileBytes != null
+                      ? SizedBox(
+                          width: double.infinity,
+                          height: 600,
+                          child: PDFView(
+                            pdfData: pdfFileBytes,
+                            defaultPage: currentPage!,
+                            fitPolicy: FitPolicy.BOTH,
+                            onRender: (p) {
+                              setState(() {
+                                pages = p;
+                                isReady = true;
+                              });
+                            },
+                            onViewCreated: (PDFViewController pdfViewController) {
+                              _controller.complete(pdfViewController);
+                            },
+                            onLinkHandler: (String? uri) {},
+                            onPageChanged: (int? page, int? total) {
+                              setState(() {
+                                currentPage = page;
+                              });
+                            },
+                          ),
+                        )
+                      : const SizedBox(),
         ],
       ),
     );
