@@ -7,6 +7,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter_object_box/controller/global_data.dart';
 import 'package:flutter_object_box/model/media_data.dart';
 import 'package:flutter_object_box/model/user_model.dart';
+import 'package:intl/intl.dart';
 import 'package:objectbox/objectbox.dart';
 import 'package:video_player/video_player.dart';
 
@@ -160,10 +161,11 @@ class _PptViewState extends State<PptView> {
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 10, 10, 10),
-                            child: Text(currentPlayedTime.toString()),
-                          ),
+                          _videoController != null && _videoController!.value.isInitialized
+                              ? Padding(
+                                  padding: const EdgeInsets.fromLTRB(0, 10, 10, 10),
+                                  child: Text(formatDuration(_videoController!.value.position)))
+                              : const SizedBox(),
                         ],
                       )
                     ],
@@ -172,5 +174,13 @@ class _PptViewState extends State<PptView> {
         ],
       ),
     );
+  }
+
+  String formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final hours = twoDigits(duration.inHours);
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+    return [if (duration.inHours > 0) hours, minutes, seconds].join(':');
   }
 }
