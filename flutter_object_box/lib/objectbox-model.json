@@ -51,10 +51,52 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "2:2207157638284776001",
+      "lastPropertyId": "6:8299070555984336087",
+      "name": "MediaFileToPreview",
+      "properties": [
+        {
+          "id": "1:2219155414785462081",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8317648957465985160",
+          "name": "filePath",
+          "type": 9
+        },
+        {
+          "id": "3:4702663567600283468",
+          "name": "previewTiming",
+          "type": 9
+        },
+        {
+          "id": "4:1517787347893535300",
+          "name": "endTime",
+          "type": 9
+        },
+        {
+          "id": "5:7975519138751465203",
+          "name": "startTime",
+          "type": 9
+        },
+        {
+          "id": "6:8299070555984336087",
+          "name": "userId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "1:7670436726829619776",
+          "relationTarget": "User"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "1:5619064148317518856",
-  "lastIndexId": "0:0",
+  "lastEntityId": "2:2207157638284776001",
+  "lastIndexId": "1:7670436726829619776",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

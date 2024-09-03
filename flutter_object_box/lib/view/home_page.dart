@@ -8,12 +8,10 @@ import 'package:flutter_object_box/view/download_and_preview.dart';
 import 'package:flutter_object_box/view/pdftron_flutter.dart';
 import 'package:flutter_object_box/view/ppt_view.dart';
 import 'package:flutter_object_box/view/show_material_banner.dart';
-import 'package:flutter_object_box/widget/floating_action_button_widget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:location/location.dart';
 import 'package:objectbox/objectbox.dart';
-import 'package:pdftron_flutter/pdftron_flutter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -49,6 +47,20 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Distance Meter"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const ShowMaterialBanner()));
+            },
+            icon: const Icon(Icons.notifications_active_outlined),
+          ),
+          IconButton(
+            onPressed: () async {
+              await LaunchApp.openApp(androidPackageName: "com.whatsapp");
+            },
+            icon: const Icon(Icons.call),
+          ),
+        ],
       ),
       drawer: Drawer(
         child: Column(
@@ -240,28 +252,28 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionWidget(
-            iconName: Icons.notifications_active_outlined,
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const ShowMaterialBanner()));
-            },
-            iconSize: 32,
-          ),
-          const SizedBox(
-            width: 20,
-          ),
-          FloatingActionWidget(
-            iconName: Icons.call,
-            onPressed: () async {
-              await LaunchApp.openApp(androidPackageName: "com.whatsapp");
-            },
-            iconSize: 32,
-          ),
-        ],
-      ),
+      // floatingActionButton: Row(
+      //   mainAxisAlignment: MainAxisAlignment.end,
+      //   children: [
+      //     FloatingActionWidget(
+      //       iconName: Icons.notifications_active_outlined,
+      //       onPressed: () {
+      //         Navigator.push(context, MaterialPageRoute(builder: (context) => const ShowMaterialBanner()));
+      //       },
+      //       iconSize: 32,
+      //     ),
+      //     const SizedBox(
+      //       width: 20,
+      //     ),
+      //     FloatingActionWidget(
+      //       iconName: Icons.call,
+      //       onPressed: () async {
+      //         await LaunchApp.openApp(androidPackageName: "com.whatsapp");
+      //       },
+      //       iconSize: 32,
+      //     ),
+      //   ],
+      // ),
     );
   }
 

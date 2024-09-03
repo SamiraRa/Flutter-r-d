@@ -15,6 +15,7 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
+import 'model/media_data.dart';
 import 'model/user_model.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
@@ -68,6 +69,50 @@ final _entities = <obx_int.ModelEntity>[
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[
+        obx_int.ModelBacklink(
+            name: 'gallery', srcEntity: 'MediaFileToPreview', srcField: '')
+      ]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(2, 2207157638284776001),
+      name: 'MediaFileToPreview',
+      lastPropertyId: const obx_int.IdUid(6, 8299070555984336087),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 2219155414785462081),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 8317648957465985160),
+            name: 'filePath',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 4702663567600283468),
+            name: 'previewTiming',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 1517787347893535300),
+            name: 'endTime',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 7975519138751465203),
+            name: 'startTime',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 8299070555984336087),
+            name: 'userId',
+            type: 11,
+            flags: 520,
+            indexId: const obx_int.IdUid(1, 7670436726829619776),
+            relationTarget: 'User')
+      ],
+      relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[])
 ];
 
@@ -106,8 +151,8 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(1, 5619064148317518856),
-      lastIndexId: const obx_int.IdUid(0, 0),
+      lastEntityId: const obx_int.IdUid(2, 2207157638284776001),
+      lastIndexId: const obx_int.IdUid(1, 7670436726829619776),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
       retiredEntityUids: const [],
@@ -122,7 +167,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
     User: obx_int.EntityDefinition<User>(
         model: _entities[0],
         toOneRelations: (User object) => [],
-        toManyRelations: (User object) => {},
+        toManyRelations: (User object) => {
+              obx_int.RelInfo<MediaFileToPreview>.toOneBacklink(6, object.id!,
+                      (MediaFileToPreview srcObject) => srcObject.user):
+                  object.gallery
+            },
         getId: (User object) => object.id,
         setId: (User object, int id) {
           object.id = id;
@@ -174,7 +223,59 @@ obx_int.ModelDefinition getObjectBoxModel() {
               firstlocAddress: firstlocAddressParam,
               secondlocAddress: secondlocAddressParam,
               distance: distanceParam);
-
+          obx_int.InternalToManyAccess.setRelInfo<User>(
+              object.gallery,
+              store,
+              obx_int.RelInfo<MediaFileToPreview>.toOneBacklink(6, object.id!,
+                  (MediaFileToPreview srcObject) => srcObject.user));
+          return object;
+        }),
+    MediaFileToPreview: obx_int.EntityDefinition<MediaFileToPreview>(
+        model: _entities[1],
+        toOneRelations: (MediaFileToPreview object) => [object.user],
+        toManyRelations: (MediaFileToPreview object) => {},
+        getId: (MediaFileToPreview object) => object.id,
+        setId: (MediaFileToPreview object, int id) {
+          object.id = id;
+        },
+        objectToFB: (MediaFileToPreview object, fb.Builder fbb) {
+          final filePathOffset = fbb.writeString(object.filePath);
+          final previewTimingOffset = fbb.writeString(object.previewTiming);
+          final endTimeOffset = fbb.writeString(object.endTime);
+          final startTimeOffset = fbb.writeString(object.startTime);
+          fbb.startTable(7);
+          fbb.addInt64(0, object.id ?? 0);
+          fbb.addOffset(1, filePathOffset);
+          fbb.addOffset(2, previewTimingOffset);
+          fbb.addOffset(3, endTimeOffset);
+          fbb.addOffset(4, startTimeOffset);
+          fbb.addInt64(5, object.user.targetId);
+          fbb.finish(fbb.endTable());
+          return object.id ?? 0;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final idParam =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
+          final filePathParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 6, '');
+          final previewTimingParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 8, '');
+          final endTimeParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 10, '');
+          final startTimeParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 12, '');
+          final object = MediaFileToPreview(
+              id: idParam,
+              filePath: filePathParam,
+              previewTiming: previewTimingParam,
+              endTime: endTimeParam,
+              startTime: startTimeParam);
+          object.user.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0);
+          object.user.attach(store);
           return object;
         })
   };
@@ -214,4 +315,35 @@ class User_ {
   /// see [User.distance]
   static final distance =
       obx.QueryStringProperty<User>(_entities[0].properties[7]);
+
+  /// see [User.gallery]
+  static final gallery = obx.QueryBacklinkToMany<MediaFileToPreview, User>(
+      MediaFileToPreview_.user);
+}
+
+/// [MediaFileToPreview] entity fields to define ObjectBox queries.
+class MediaFileToPreview_ {
+  /// see [MediaFileToPreview.id]
+  static final id =
+      obx.QueryIntegerProperty<MediaFileToPreview>(_entities[1].properties[0]);
+
+  /// see [MediaFileToPreview.filePath]
+  static final filePath =
+      obx.QueryStringProperty<MediaFileToPreview>(_entities[1].properties[1]);
+
+  /// see [MediaFileToPreview.previewTiming]
+  static final previewTiming =
+      obx.QueryStringProperty<MediaFileToPreview>(_entities[1].properties[2]);
+
+  /// see [MediaFileToPreview.endTime]
+  static final endTime =
+      obx.QueryStringProperty<MediaFileToPreview>(_entities[1].properties[3]);
+
+  /// see [MediaFileToPreview.startTime]
+  static final startTime =
+      obx.QueryStringProperty<MediaFileToPreview>(_entities[1].properties[4]);
+
+  /// see [MediaFileToPreview.user]
+  static final user = obx.QueryRelationToOne<MediaFileToPreview, User>(
+      _entities[1].properties[5]);
 }

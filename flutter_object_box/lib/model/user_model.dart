@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter_object_box/model/media_data.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
@@ -12,6 +13,9 @@ class User {
   String firstlocAddress;
   String secondlocAddress;
   String distance;
+
+  @Backlink()
+  final gallery = ToMany<MediaFileToPreview>();
 
   User({
     this.id,
