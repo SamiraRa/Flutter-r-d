@@ -44,42 +44,30 @@ class _DownloadAndPreviewState extends State<DownloadAndPreview> {
     final file = result.files.first;
 
     final fileExt = file.extension;
-
+//===============================================================
+//===============================================================
     if (fileExt == "pdf") {
       fromAsset("abcd", file).then((value) {
         setState(() {
           pdfFilePath = file.path.toString();
         });
       });
-      // OpenFile.open(file.path!);
     } else if (imgExtensions.contains(fileExt)) {
       setState(() {
         imgFile = File(file.path!);
       });
-      print("image file $fileExt");
     } else if (fileExt == "svg") {
-      print(fileExt);
       setState(() {
         svgImageFile = File(file.path!);
       });
     }
-    // Directory tempDirect = await getTemporaryDirectory();
-    // String tempPath = tempDirect.path;
-    // print(tempPath);
-
-    // //================================================================
-    // Directory appDocDir = await getApplicationDocumentsDirectory();
-    // String appDirPath = appDocDir.path;
-    // final file = File('$appDirPath');
-    // print(appDirPath);
-
-    // //================================================================
-    // Directory? externalStorageDir = await getExternalStorageDirectory();
-    // String externalFilePath = externalStorageDir!.path;
-    // print(externalFilePath);
+//===============================================================
+//===============================================================
   }
 
   Future fromAsset(String filename, PlatformFile platformfile) async {
+    //================================> PDF
+
     Completer<File> completer = Completer();
     try {
       File file = File(platformfile.path!);
@@ -92,6 +80,8 @@ class _DownloadAndPreviewState extends State<DownloadAndPreview> {
     }
   }
 
+//=================================PDFFILEBYTES GOES WITH INDEX
+//=================================Controllers Goes With INDEX Too
   @override
   Widget build(BuildContext context) {
     return Scaffold(
