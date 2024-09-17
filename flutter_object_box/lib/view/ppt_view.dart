@@ -26,6 +26,8 @@ class _PptViewState extends State<PptView> with SingleTickerProviderStateMixin {
   double scale = 1.0;
   late AnimationController controller;
   VideoPlayerController? _videoController;
+  List<VideoPlayerController> videoCntrllers = [];
+
   // final Completer<PDFViewController> _controller = Completer<PDFViewController>();
   int? pages = 0;
   int? currentPage = 0;
@@ -91,9 +93,12 @@ class _PptViewState extends State<PptView> with SingleTickerProviderStateMixin {
     final result = await FilePicker.platform.pickFiles();
     if (result != null && result.files.single.path != null) {
       final file = result.files.first;
-      galleryMedia.add(videoFile);
+      setState(() {
+        galleryMedia.add(file);
+      });
 
       final fileExt = file.extension;
+
       if (fileExt == "pdf") {
         fromAsset(file.name, file).then((value) {
           setState(() {
@@ -146,6 +151,25 @@ class _PptViewState extends State<PptView> with SingleTickerProviderStateMixin {
     }
   }
 
+  void resetFile() {
+    // if (_videoController != null) {
+    //   _videoController!.dispose();
+    //   _videoController = null;
+    // }
+
+    if (imgFile != null) {
+      imgFile = null;
+    }
+
+    if (svgImageFile != null) {
+      svgImageFile = null;
+    }
+
+    if (pdfFileBytes != null) {
+      pdfFileBytes = null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_videoController != null) {
@@ -186,55 +210,116 @@ class _PptViewState extends State<PptView> with SingleTickerProviderStateMixin {
               ),
               itemCount: galleryMedia.length,
               itemBuilder: (context, index) {
-                return _videoController != null && _videoController!.value.isInitialized
+                PlatformFile file = galleryMedia[index];
+                if (file.extension == "mp4") {
+                  if (_videoController != null && _videoController!.value.isInitialized) {
+                    return
 
-                    ///initialize videoCoontroller in here rather then at first
-                    ? Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.white)),
-                        child: AspectRatio(
-                          aspectRatio: _videoController!.value.aspectRatio,
-                          child: VideoPlayer(_videoController!),
-                        ),
-                      )
-                    : imgFile != null
-                        ? SizedBox(
-                            height: 400,
-                            width: double.infinity,
-                            child: PhotoView(imageProvider: FileImage(imgFile!)),
-                          )
-                        : svgImageFile != null
-                            ? SvgPicture.file(
-                                svgImageFile!,
-                                height: 400,
-                                width: double.infinity,
-                              )
-                            : pdfFileBytes != null
-                                ? SizedBox(
-                                    width: double.infinity,
-                                    height: 600,
-                                    child: PDFView(
-                                      pdfData: pdfFileBytes,
-                                      defaultPage: currentPage!,
-                                      fitPolicy: FitPolicy.BOTH,
-                                      onRender: (p) {
-                                        setState(() {
-                                          pages = p;
-                                          isReady = true;
-                                        });
-                                      },
-                                      // onViewCreated: (PDFViewController pdfViewController) {
-                                      //   _controller.complete(pdfViewController);
-                                      // },
-                                      onLinkHandler: (String? uri) {},
-                                      onPageChanged: (int? page, int? total) {
-                                        setState(() {
-                                          currentPage = page;
-                                        });
-                                      },
-                                    ),
-                                  )
-                                : const SizedBox();
+                        ///initialize videoCoontroller in here rather then at first
+                        Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.white)),
+                      child: AspectRatio(
+                        aspectRatio: _videoController!.value.aspectRatio,
+                        child: VideoPlayer(_videoController!),
+                      ),
+                    );
+                  }
+                } else if (imgExtensions.contains(file.extension)) {
+                  if (imgFile != null) {
+                    return SizedBox(
+                      height: 400,
+                      width: double.infinity,
+                      child: PhotoView(imageProvider: FileImage(imgFile!)),
+                    );
+                  }
+                } else if (file.extension == "svg") {
+                  return SvgPicture.file(
+                    svgImageFile!,
+                    height: 400,
+                    width: double.infinity,
+                  );
+                } else if (file.extension == "pdf") {
+                  return SizedBox(
+                    width: double.infinity,
+                    height: 600,
+                    child: PDFView(
+                      pdfData: pdfFileBytes,
+                      defaultPage: currentPage!,
+                      fitPolicy: FitPolicy.BOTH,
+                      onRender: (p) {
+                        setState(() {
+                          pages = p;
+                          isReady = true;
+                        });
+                      },
+                      // onViewCreated: (PDFViewController pdfViewController) {
+                      //   _controller.complete(pdfViewController);
+                      // },
+                      onLinkHandler: (String? uri) {},
+                      onPageChanged: (int? page, int? total) {
+                        setState(() {
+                          currentPage = page;
+                        });
+                      },
+                    ),
+                  );
+                } else {
+                  return SizedBox();
+                }
+
+                //  _videoController != null && _videoController!.value.isInitialized
+
+                //     ///initialize videoCoontroller in here rather then at first
+                //     ? Container(
+                //         decoration: BoxDecoration(
+                //             borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.white)),
+                //         child: AspectRatio(
+                //           aspectRatio: _videoController!.value.aspectRatio,
+                //           child: VideoPlayer(_videoController!),
+                //         ),
+                //       )
+                //     :
+                // imgFile != null
+                //     ? SizedBox(
+                //         height: 400,
+                //         width: double.infinity,
+                //         child: PhotoView(imageProvider: FileImage(imgFile!)),
+                //       )
+                //     :
+                // svgImageFile != null
+                //     ? SvgPicture.file(
+                //         svgImageFile!,
+                //         height: 400,
+                //         width: double.infinity,
+                //       )
+                //     :
+                // pdfFileBytes != null
+                //     ? SizedBox(
+                //         width: double.infinity,
+                //         height: 600,
+                //         child: PDFView(
+                //           pdfData: pdfFileBytes,
+                //           defaultPage: currentPage!,
+                //           fitPolicy: FitPolicy.BOTH,
+                //           onRender: (p) {
+                //             setState(() {
+                //               pages = p;
+                //               isReady = true;
+                //             });
+                //           },
+                //           // onViewCreated: (PDFViewController pdfViewController) {
+                //           //   _controller.complete(pdfViewController);
+                //           // },
+                //           onLinkHandler: (String? uri) {},
+                //           onPageChanged: (int? page, int? total) {
+                //             setState(() {
+                //               currentPage = page;
+                //             });
+                //           },
+                //         ),
+                //       )
+                //     : const SizedBox();
               },
             ),
           ],
