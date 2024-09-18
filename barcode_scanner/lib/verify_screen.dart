@@ -10,7 +10,7 @@ class OrganizerVerifierScreen extends StatefulWidget {
 }
 
 class _OrganizerVerifierScreenState extends State<OrganizerVerifierScreen> {
-  String _scanBarcode = "";
+  String scanBarcode = "";
 
   Future<void> scanBarcodeNormal() async {
     String barcodeScanRes;
@@ -28,7 +28,7 @@ class _OrganizerVerifierScreenState extends State<OrganizerVerifierScreen> {
     if (!mounted) return;
 
     setState(() {
-      _scanBarcode = barcodeScanRes;
+      scanBarcode = barcodeScanRes;
     });
   }
 
