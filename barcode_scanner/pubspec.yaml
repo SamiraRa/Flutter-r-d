@@ -39,6 +39,7 @@ dependencies:
   barcode_widget: ^2.0.4
   flutter_riverpod: ^2.4.10
   lottie: ^2.7.0
+  flutter_animate: ^4.5.0
 
 dev_dependencies:
   flutter_test:

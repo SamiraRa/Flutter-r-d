@@ -124,7 +124,8 @@ class _PurchaseTicketScreenState extends State<PurchaseTicketScreen> {
                       print(purchaseCode);
                     });
                   },
-                  child: const Text("Purchase Ticket"))
+                  child: const Text("Purchase Ticket"),
+                ),
         ],
       ),
     );
