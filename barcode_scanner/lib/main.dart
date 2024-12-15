@@ -21,7 +21,7 @@ class MyApp extends ConsumerWidget {
         useMaterial3: true,
         // brightness: brightnessStatus
       ),
-      home: const LoginPage(),
+      home: MyPage(),
     );
   }
 }

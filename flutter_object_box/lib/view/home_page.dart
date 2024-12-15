@@ -4,6 +4,7 @@ import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_object_box/controller/global_data.dart';
 import 'package:flutter_object_box/model/user_model.dart';
+import 'package:flutter_object_box/objectbox.g.dart';
 import 'package:flutter_object_box/view/download_and_preview.dart';
 import 'package:flutter_object_box/view/pdftron_flutter.dart';
 import 'package:flutter_object_box/view/ppt_view.dart';
@@ -213,6 +214,15 @@ class _HomePageState extends State<HomePage> {
                       firstLatitudeF = locationData!.latitude ?? 0.0;
                       firstlongitudeF = locationData!.longitude ?? 0.0;
                       firstLocationTaken = true;
+                      User userPlaceF = User(
+                          firstLat: firstLatitudeF,
+                          firstLong: firstlongitudeF,
+                          secondLat: 0.0,
+                          secondLong: 0.0,
+                          firstlocAddress: "",
+                          secondlocAddress: "",
+                          distance: "");
+                      userBox.put(userPlaceF);
                       setState(() {});
                     }
                   },
@@ -231,15 +241,15 @@ class _HomePageState extends State<HomePage> {
                     String distance =
                         calculateDistance(firstLatitudeF, firstlongitudeF, secondLatitudeF, secondlongitudeF)
                             .toStringAsFixed(2);
-                    User userPlaceF = User(
-                        firstLat: firstLatitudeF,
-                        firstLong: firstlongitudeF,
-                        secondLat: secondLatitudeF,
-                        secondLong: secondlongitudeF,
-                        firstlocAddress: locationAddress,
-                        secondlocAddress: "",
-                        distance: distance);
-                    userBox.put(userPlaceF);
+                    final query =
+                        userBox.query(User_.secondLat.lessOrEqual(0.0) & User_.secondLong.lessOrEqual(0.0)).build();
+                    final userplaceF = query.findFirst();
+                    query.close();
+                    userplaceF!.secondLat = secondLatitudeF;
+                    userplaceF.secondLong = secondlongitudeF;
+                    userplaceF.distance = distance;
+                    userplaceF.secondlocAddress = "";
+                    userBox.put(userplaceF);
                     setState(() {
                       streamUser = userBox.getAll();
                       firstLocationTaken = false;

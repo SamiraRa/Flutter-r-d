@@ -77,3 +77,51 @@ class LoginPage extends ConsumerWidget {
     );
   }
 }
+
+class MyPage extends ConsumerStatefulWidget {
+  @override
+  _MyPageState createState() => _MyPageState();
+}
+
+class _MyPageState extends ConsumerState<MyPage> {
+  int _localCounter = 0; // Local state with setState
+
+  @override
+  Widget build(BuildContext context) {
+    // Riverpod state
+    final counterProvider = ref.watch(counterStateProvider);
+
+    return Scaffold(
+      appBar: AppBar(title: Text('Riverpod and setState Together')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Display Riverpod state
+            Text('Riverpod Counter: $counterProvider'),
+
+            // Display local state with setState
+            Text('setState Counter: $_localCounter'),
+
+            // Button to increment local state with setState
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _localCounter++; // Updates local state
+                });
+              },
+              child: Text('Increment Local Counter'),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Update Riverpod state
+          ref.read(counterStateProvider.notifier).state++;
+        },
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}
